@@ -11,7 +11,7 @@ import io
 # CONFIGURATION
 # ─────────────────────────
 FISH_COLOR = (245/255, 130/255, 31/255)      
-BONE_SPACING = 4.0                        # distance between category "bones"
+BONE_SPACING = 5.0                        # distance between category "bones"
 
 # ──────────────────────────────────────────────────────────────────────────────────────────────
 # 0) Adjust the length of the fishbone tail based on the number of categories
@@ -22,7 +22,7 @@ def tail_offset(n_cat: int) -> float:
     elif n_cat < 5:
         return -4
     else:
-        return -5.5
+        return -6.5
 
 # ─────────────────────────
 # HELPER FUNCTIONS
