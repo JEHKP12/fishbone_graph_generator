@@ -20,9 +20,9 @@ def tail_offset(n_cat: int) -> float:
     if n_cat < 3:
         return -2
     elif n_cat < 5:
-        return -6
+        return -4
     else:
-        return -9
+        return -5.5
 
 # ─────────────────────────
 # HELPER FUNCTIONS
