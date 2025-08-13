@@ -25,7 +25,7 @@ def tail_offset(n_cat: int) -> float:
         return -5.5
 
 # ─────────────────────────
-# 3) HELPER FUNCTIONS
+# HELPER FUNCTIONS
 # ─────────────────────────
 def problems(ax, label, p_x, p_y, angle_y, bone_length=180, scale=0.55):
     FIXED_ANGLE_DEGREES = 52 if angle_y > 0 else -52
@@ -46,10 +46,12 @@ def causes(ax, items, c_x, c_y, top=True, scale=0.45):
     offsets = [[0.02, 0], [0.23, 0.5], [-0.46, -1],
                [0.69, 1.5], [-0.92, -2], [1.15, 2.5]]
     FIXED_ARROW_LENGTH = -20.0 
-    # Ensure items is a list of strings
+    # Ensure items is a list of valid strings
+    if not isinstance(items, list):
+        st.warning(f"Invalid items type: {type(items)}. Expected a list. Skipping.")
+        return
     items = [str(item) for item in items if pd.notna(item) and str(item).strip() != '']
-    # Limit items to the number of available offsets
-    items = items[:len(offsets)]
+    items = items[:len(offsets)]  # Limit to available offsets
     for idx, txt in enumerate(items):
         c_x -= offsets[idx][0]
         c_y += offsets[idx][1] if top else -offsets[idx][1]
@@ -89,8 +91,10 @@ def draw_body(ax, categories, head_radius, problem_fontsize, main_problem, bone_
             offset -= BONE_SPACING
 
         problems(ax, cat, p_x, 0, angle_y, bone_length)
-        if sub:  # Only call causes if sub is not empty
+        if sub and isinstance(sub, list):  # Ensure sub is a list and not empty
             causes(ax, sub, c_x, cause_y, top=upper)
+        else:
+            st.warning(f"Skipping category '{cat}' due to invalid or empty causes: {sub}")
 
 # Streamlit App
 st.title("Fishbone Diagram Generator")
@@ -118,9 +122,9 @@ if uploaded_file is not None:
             for col in df.columns:
                 if col == 'Main Problem':
                     continue
-                causes = df[col].dropna().tolist()
-                if causes:  # Only include non-empty cause lists
-                    categories[col] = causes
+                cause_list = df[col].dropna().tolist()
+                if cause_list and isinstance(cause_list, list):
+                    categories[col] = cause_list
             if not categories:
                 st.error("No valid categories found in the Excel file. Please ensure there are columns with causes.")
                 st.stop()
@@ -131,7 +135,7 @@ if uploaded_file is not None:
             x_tail = tail_offset(n_cat) - length
             x_head = 2 + length
 
-            fig, ax = plt.subplots(figsize=(10, 5.625))
+            fig, ax = plt.subplots(figsize=(8, 4.5))  # Reduced size for performance
             ax.set_xlim(x_tail - 2, x_head + head_radius + 2)
             ax.set_ylim(-6, 6)
             ax.axis('off')
