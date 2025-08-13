@@ -100,7 +100,7 @@ def draw_body(ax, categories, head_radius, problem_fontsize, main_problem, bone_
 st.title("Fishbone Diagram Generator")
 
 # File Uploader
-uploaded_file = st.file_uploader("Upload Excel file (fishbone.xlsx format)", type=["xlsx"])
+uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
 
 # Input Parameters
 head_radius = st.number_input("Fish Head Radius", value=1.5, min_value=0.1, step=0.1)
