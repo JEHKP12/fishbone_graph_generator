@@ -11,7 +11,6 @@ import io
 # CONFIGURATION
 # ─────────────────────────
 FISH_COLOR = (245/255, 130/255, 31/255)      
-BONE_SPACING = 5.0                        # distance between category "bones"
 
 # ──────────────────────────────────────────────────────────────────────────────────────────────
 # 0) Adjust the length of the fishbone tail based on the number of categories
@@ -22,7 +21,7 @@ def tail_offset(n_cat: int) -> float:
     elif n_cat < 5:
         return -4
     else:
-        return -6.5
+        return -5.5
 
 # ─────────────────────────
 # HELPER FUNCTIONS
@@ -71,6 +70,14 @@ def draw_spine(ax, xmin, xmax, head_radius, main_problem, problem_fontsize):
 
 def draw_body(ax, categories, head_radius, problem_fontsize, main_problem, bone_length=180):
     n_cat = len(categories)
+    # Set BONE_SPACING dynamically based on n_cat
+    if n_cat < 3:
+        BONE_SPACING = 3
+    elif n_cat < 5:
+        BONE_SPACING = 4
+    else:
+        BONE_SPACING = 5
+    
     length = math.ceil(n_cat / 2) - 1
     x_tail = tail_offset(n_cat) - length
     x_head = 2 + length
@@ -100,12 +107,12 @@ def draw_body(ax, categories, head_radius, problem_fontsize, main_problem, bone_
 st.title("Fishbone Diagram Generator")
 
 # File Uploader
-uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
+uploaded_file = st.file_uploader("Upload Excel file (fishbone.xlsx format)", type=["xlsx"])
 
 # Input Parameters
 head_radius = st.number_input("Fish Head Radius", value=1.5, min_value=0.1, step=0.1)
 problem_fontsize = st.number_input("Main Problem Font Size", value=9.0, min_value=1.0, step=1.0)
-bone_length = st.number_input("Bone Length", value=135.0, min_value=10.0, step=10.0)
+bone_length = st.number_input("Bone Length", value=180.0, min_value=10.0, step=10.0)
 
 if uploaded_file is not None:
     if st.button("Generate Preview"):
@@ -135,10 +142,10 @@ if uploaded_file is not None:
             x_tail = tail_offset(n_cat) - length
             x_head = 2 + length
 
-            # Increase figure size for larger preview
-            fig, ax = plt.subplots(figsize=(12, 7))  # Increased from (8, 4.5) for larger preview
-            ax.set_xlim(x_tail - 3, x_head + head_radius + 3)  # Adjusted for larger figure
-            ax.set_ylim(-8, 8)  # Adjusted for larger figure
+            # Use larger figure size for preview
+            fig, ax = plt.subplots(figsize=(12, 7))
+            ax.set_xlim(x_tail - 3, x_head + head_radius + 3)
+            ax.set_ylim(-8, 8)
             ax.axis('off')
 
             draw_body(ax, categories, head_radius, problem_fontsize, main_problem, bone_length)
