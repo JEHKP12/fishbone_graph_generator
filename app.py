@@ -105,7 +105,7 @@ uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
 # Input Parameters
 head_radius = st.number_input("Fish Head Radius", value=1.5, min_value=0.1, step=0.1)
 problem_fontsize = st.number_input("Main Problem Font Size", value=9.0, min_value=1.0, step=1.0)
-bone_length = st.number_input("Bone Length", value=180.0, min_value=10.0, step=10.0)
+bone_length = st.number_input("Bone Length", value=135.0, min_value=10.0, step=10.0)
 
 if uploaded_file is not None:
     if st.button("Generate Preview"):
