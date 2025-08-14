@@ -141,10 +141,10 @@ if uploaded_file is not None:
             x_tail = tail_offset(n_cat) - length
             x_head = 2 + length
 
-            # Increase figure size for larger preview
-            fig, ax = plt.subplots(figsize=(12, 7))  # Increased from (8, 4.5) for larger preview
-            ax.set_xlim(x_tail - 3, x_head + head_radius + 3)  # Adjusted for larger figure
-            ax.set_ylim(-8, 8)  # Adjusted for larger figure
+            # Preview Figure Size
+            fig, ax = plt.subplots(figsize=(12, 7))  
+            ax.set_xlim(x_tail - 3, x_head + head_radius + 3)
+            ax.set_ylim(-8, 8) 
             ax.axis('off')
 
             draw_body(ax, categories, head_radius, problem_fontsize, main_problem, bone_length)
